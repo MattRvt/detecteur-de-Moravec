@@ -1,8 +1,12 @@
 # detecteur-de-Moravec (IUT:S3)
 objectif: générer une heatMap des changement au seins d'une image
 
- - Langage utilisé : 
+ - Langage utilisé : Python 
  - Résultat attendu : heatMap des points d'interet.
+ 
+#installation des dépendances:
+ - pip install Pillow
+
 
 ## Créateurs du projet
 3 étudiants de 2A DUT informatique :
