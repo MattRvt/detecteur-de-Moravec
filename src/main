@@ -1,0 +1,4 @@
+import imageio
+
+im = imageio.imread('chargementImage/mel.png')
+print(im[0][0])
