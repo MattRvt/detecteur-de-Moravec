@@ -2,13 +2,13 @@ import imageio
 import numpy
 
 def Intensite(r, g, b):
-   return (r**3)+ (g**2) + b
+   return r*3+ g*2 + b
 
 #def MoyenneIntensite(image, rayon, hauteur, largeur, posX, posY, somme, nbCase):
    
 
 
-im = imageio.imread('chargementImage/mel.png', format = 'png')
+im = imageio.imread('chargementImage/arbre.jpg', format = 'jpg')
 info = im.shape
 h=info[0]
 w=info[1]
@@ -40,12 +40,17 @@ for y in range(h):
          somme = somme+Intensite(im[y][x][0], im[y][x][1], im[y][x][2])
          n = n+1
          imIntensiteMoy=somme/n
-         imIntensite[y][x]=int(abs((Intensite(im[y][x][0], im[y][x][1], im[y][x][2]) - imIntensiteMoy)/65281))
+         imIntensite[y][x]=int(abs((Intensite(im[y][x][0], im[y][x][1], im[y][x][2]) - imIntensiteMoy)/6))
 for y in range(h):
     for x in range(w):
-       im[y][x][0] = imIntensite[y][x]
-       im[y][x][1] = imIntensite[y][x]
-       im[y][x][2] = imIntensite[y][x]
+       if(imIntensite[y][x]>10):
+          im[y][x][0] = 255
+          im[y][x][1] = 0
+          im[y][x][2] = 255
+       else :
+          im[y][x][0] = 0
+          im[y][x][1] = 0
+          im[y][x][2] = 0
        
-imageio.imsave('chargementImage/16t.png',im, format = 'png')
+imageio.imsave('chargementImage/arbre.png',im, format = 'png')
 
