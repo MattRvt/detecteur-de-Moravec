@@ -4,8 +4,9 @@ objectif: générer une heatMap des changement au seins d'une image
  - Langage utilisé : Python 
  - Résultat attendu : heatMap des points d'interet.
  
-#installation des dépendances:
- - pip install Pillow
+#installation des dépendances pip (cocher la case "installer pip" à l'installation de python)
+
+ - pip install imageio
 
 
 ## Créateurs du projet
