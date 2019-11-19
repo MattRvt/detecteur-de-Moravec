@@ -1,0 +1,4 @@
+function [imageMatrice]=foo(imagePath)
+    imageMatrice = imread(’C:/Users/user/Documents/projetGit/detecteur-de-Moravec/src/chargementImage/mel.png’)
+    disp(imagePath)
+endfunction
