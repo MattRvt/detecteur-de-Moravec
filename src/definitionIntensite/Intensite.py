@@ -1,32 +1,83 @@
-#import numpy
+import time
+from concurrent.futures import thread
+from threading import Thread, RLock
 
-def Intensite(r, g, b):
-   return (r**3)+ (g**2) + b
+verrou = RLock()
 
-##def Fenetre(image, centre, rayon):
-##   ligneTotal = len(image)
-##   colonneTotal =len(image[0])
-##   fenetre = numpy.ones((rayon+2, rayon+2))
-##   return fenetre
-##   
-##
-##w = 5
-##h = 2
-##
-##image = [[[255,255,255],[0,0,0],[125,30,230],[230,230,230],[128,80,68]],
-##          [[255,18,255],[96,0,8],[120,30,230],[196,20,158],[68,80,68]]]
-##print(Fenetre(image, 0, 5))
-####for y in range(h):
-####   for x in range(w):
-####      if(x <w-1):
-####         pixel = image[y][x]
-####         pixelDroite = image[y][x+1]
-####         r=pixel[0]
-####         g=pixel[1]
-####         b=pixel[2]
-####         r2=pixelDroite[0]
-####         g2=pixelDroite[1]
-####         b2=pixelDroite[2]
-####         print((Intensite(r, g, b)-Intensite(r2, g2, b2))**2)
-####      
-##   
+
+class Partie(Thread):
+    # """Thread chargé simplement d'afficher un mot dans la console."""
+
+    def __init__(self, minY, maxY, im, h, w):
+        Thread.__init__(self)
+        self.minY = minY
+        self.maxY = maxY
+        self.im = im
+        self.h = h
+        self.w = w
+        self.imIntensite = [[0 for j in range(w)] for i in range(h)]
+
+    def run(self):
+        """Code à exécuter pendant l'exécution du thread."""
+        for y in range(self.minY,self.maxY):
+            for x in range(self.w):
+                rayonVoisinageStatic = 1
+                rayonVoisinage = rayonVoisinageStatic
+                voisinageParcourue = False
+                intensitePixeles = 0
+                p = self.im[y][x]
+                somme = 0
+                while not voisinageParcourue:
+                    n = 0
+                    # si on atteint le pas bord en haut de l'immage
+                    if (y - rayonVoisinage >= 0):
+                        # tout la rangee du haut
+                        somme = somme + self.Intensite(self.im[y - rayonVoisinage][x][0],
+                                                       self.im[y - rayonVoisinage][x][1],
+                                                       self.im[y - rayonVoisinage][x][2])
+                        n = n + 1
+                    if (x - rayonVoisinage >= 0):
+                        # haut gauche
+                        somme = somme + self.Intensite(self.im[y - rayonVoisinage][x - rayonVoisinage][0],
+                                                       self.im[y - rayonVoisinage][x - rayonVoisinage][1],
+                                                       self.im[y - rayonVoisinage][x - rayonVoisinage][2])
+                        n = n + 1
+                        # haut droit
+                    if (x + rayonVoisinage < self.w):
+                        somme = somme + self.Intensite(self.im[y - rayonVoisinage][x + rayonVoisinage][0],
+                                                       self.im[y - rayonVoisinage][x + rayonVoisinage][1],
+                                                       self.im[y - rayonVoisinage][x + rayonVoisinage][2])
+                        n = n + 1
+                    #   si on atteint pas la limite gauche de l'image
+                    if (x - rayonVoisinage >= 0):
+                        # tout la rangee d'en bas
+                        somme = somme + self.Intensite(self.im[y][x - rayonVoisinage][0],
+                                                       self.im[y][x - rayonVoisinage][1],
+                                                       self.im[y][x - rayonVoisinage][2])
+                        n = n + 1
+                    # bas gauche
+                    if (y - rayonVoisinage >= 0):
+                        somme = somme + self.Intensite(self.im[y - rayonVoisinage][x - rayonVoisinage][0],
+                                                       self.im[y - rayonVoisinage][x - rayonVoisinage][1],
+                                                       self.im[y - rayonVoisinage][x - rayonVoisinage][2])
+                        n = n + 1
+                        # bas droit
+                    if (y + rayonVoisinage < self.h):
+                        somme = somme + self.Intensite(self.im[y + rayonVoisinage][x - rayonVoisinage][0],
+                                                       self.im[y + rayonVoisinage][x - rayonVoisinage][1],
+                                                       self.im[y + rayonVoisinage][x - rayonVoisinage][2])
+                        n = n + 1
+                    rayonVoisinage -= 1
+                    voisinageParcourue = rayonVoisinage == 0
+                # pixel central
+                somme = somme + self.Intensite(self.im[y][x][0], self.im[y][x][1], self.im[y][x][2])
+
+                n = n + 1
+                imIntensiteMoy = somme / n
+                intensite = int(
+                    abs(self.Intensite(self.im[y][x][0], self.im[y][x][1], self.im[y][x][2]) - imIntensiteMoy))
+                intensite = intensite / (6 * rayonVoisinageStatic)
+                self.imIntensite[y][x] = intensite
+
+    def Intensite(self, r, g, b):
+        return r * 1 + g * 3 + b * 2
