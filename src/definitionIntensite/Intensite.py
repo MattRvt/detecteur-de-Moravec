@@ -23,7 +23,7 @@ class Partie(Process):
             for x in range(self.w):
 
                 # pour chaque pixel
-                rayonVoisinageStatic = 1
+                rayonVoisinageStatic = 100
                 p = self.im[y][x]
                 intensiteP = self.Intensite(p[0], p[1], p[2])
                 somme = 0
