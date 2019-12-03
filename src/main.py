@@ -14,14 +14,14 @@ imIntensiteMoy = [[0 for j in range(w)] for i in range(h)]
 queue = Queue()
 # creation des parties de limages
 nombreProcess = 8
-partie = []
+parties = []
 for i in range(nombreProcess):
     process = Partie(int(i * (h / nombreProcess)), int((i + 1) * (h / nombreProcess)), im, h, w, i, queue)
-    partie.append(process)
+    parties.append(process)
 
 # demarage des thread
 for i in range(nombreProcess):
-    partie[i].start()
+    parties[i].run()
 
 # lecture des donnes
 imIntensite = [[0] * len(im[1])] * len(im)  # le tableau a la meme taille que l'image d'origine
@@ -36,7 +36,7 @@ for i in range(nombreProcess):
 
 # verification que les process se sont bien termine
 for i in range(nombreProcess):
-    partie[i].join()
+    parties[i].join()
 
 # definit le code RGB de chaque pixel
 print("ecriture de l'image ")
