@@ -5,6 +5,7 @@ from multiprocessing import Queue
 
 import imageio
 from src.definitionIntensite.Intensite import Partie
+
 if __name__ == '__main__':
     print("debut du programme")
     im = imageio.imread('chargementImage/arbre.jpg', format='jpg')
@@ -19,14 +20,14 @@ if __name__ == '__main__':
     for i in range(nombreProcess):
         process = Partie(int(i * (h / nombreProcess)), int((i + 1) * (h / nombreProcess)), im, h, w, i, queue)
         parties.append(process)
-    
+
     # demarage des thread
     for i in range(nombreProcess):
         parties[i].start()
-    
+
     # lecture des donnes
     imIntensite = [[0] * len(im[1])] * len(im)  # le tableau a la meme taille que l'image d'origine
-    
+
     imRecu = []
     for i in range(nombreProcess):
         queueGet = queue.get()
@@ -34,19 +35,19 @@ if __name__ == '__main__':
         numProcess = queueGet[1]
         imIntensite[int(numProcess * (h / nombreProcess)):int((numProcess + 1) * (h / nombreProcess))] \
             = (imRecu[int(numProcess * (h / nombreProcess)):int((numProcess + 1) * (h / nombreProcess))])
-    
+
     # verification que les process se sont bien termine
     for i in range(nombreProcess):
         parties[i].join()
-    
+
     # definit le code RGB de chaque pixel
     print("ecriture de l'image ")
     for y in range(h):
         for x in range(w):
-            contraste = 2
-            im[y][x][0] = (255 - (imIntensite[y][x] * contraste))
-            im[y][x][1] = (255 - (imIntensite[y][x] * contraste))
-            im[y][x][2] = (255 - (imIntensite[y][x] * contraste))
+            contraste = 1
+            im[y][x][0] = 255 - (imIntensite[y][x] * contraste)
+            im[y][x][1] = 255 - (imIntensite[y][x] * contraste)
+            im[y][x][2] = 255 - (imIntensite[y][x] * contraste)
             """
             if imIntensite[y][x] > 100:
                 im[y][x][0] = 0
@@ -58,4 +59,3 @@ if __name__ == '__main__':
                 im[y][x][2] = 255
                         """
     imageio.imsave('chargementImage/france.png', im, format='png')
-    
