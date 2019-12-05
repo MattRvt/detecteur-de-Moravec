@@ -23,13 +23,14 @@ class Partie(Process):
             for x in range(self.w):
 
                 # pour chaque pixel
-                rayonVoisinageStatic = 100
+                rayonVoisinageStatic = 10
                 p = self.im[y][x]
                 intensiteP = self.Intensite(p[0], p[1], p[2])
                 somme = 0
                 n = 0
-                for rayonVoisinage in range(1,rayonVoisinageStatic+1):
+                for rayonVoisinage in range(0, rayonVoisinageStatic + 1):
 
+                    rayonVoisinage = rayonVoisinage
                     # si on atteint le pas bord en haut de l'immage
                     if (y - rayonVoisinage >= 0):
                         # px du haut
@@ -37,7 +38,29 @@ class Partie(Process):
                                              self.im[y - rayonVoisinage][x][1],
                                              self.im[y - rayonVoisinage][x][2])
                         diffIntensite = (intensiteP - Iuv) ** 2
-                        somme = somme + (diffIntensite/(rayonVoisinage+1))
+                        somme = somme + (diffIntensite / (rayonVoisinage + 1))
+                        n = n + 1
+
+                        # px haut gauche
+                        if (x - rayonVoisinageStatic >= 0):
+                            for xTemp in range(x - rayonVoisinageStatic, x + 1):
+                                Iuv = self.Intensite(self.im[y - rayonVoisinage][xTemp][0],
+                                                     self.im[y - rayonVoisinage][xTemp][1],
+                                                     self.im[y - rayonVoisinage][xTemp][2])
+                                diffIntensite = (intensiteP - Iuv) ** 2
+                                somme = somme + (diffIntensite / (rayonVoisinage + 1))
+                                n = n + 1
+
+                        # px haut droit
+                        if (x + rayonVoisinageStatic < self.w):
+                            for xTemp in range(x + 1, x + rayonVoisinageStatic + 1):
+                                Iuv = self.Intensite(self.im[y - rayonVoisinage][xTemp][0],
+                                                     self.im[y - rayonVoisinage][xTemp][1],
+                                                     self.im[y - rayonVoisinage][xTemp][2])
+                                diffIntensite = (intensiteP - Iuv) ** 2
+                                somme = somme + (diffIntensite / (rayonVoisinage + 1))
+                                n = n + 1
+
                         n = n + 1
                     #   si on atteint pas la limite bas de l'image
                     if (y + rayonVoisinage < self.h):
@@ -46,18 +69,37 @@ class Partie(Process):
                                              self.im[y + rayonVoisinage][x][1],
                                              self.im[y + rayonVoisinage][x][2])
                         diffIntensite = (intensiteP - Iuv) ** 2
-                        somme = somme + (diffIntensite/(rayonVoisinage+1))
+                        somme = somme + (diffIntensite / (rayonVoisinage + 1))
                         n = n + 1
 
+                        # px haut gauche
+                        if (x - rayonVoisinage >= 0):
+                            for xTemp in range(x - rayonVoisinage, x + 1):
+                                Iuv = self.Intensite(self.im[y + rayonVoisinage][xTemp][0],
+                                                     self.im[y + rayonVoisinage][xTemp][1],
+                                                     self.im[y + rayonVoisinage][xTemp][2])
+                                diffIntensite = (intensiteP - Iuv) ** 2
+                                somme = somme + (diffIntensite / (rayonVoisinage + 1))
+                                n = n + 1
 
-                    #pixel a gauche
+                        # px bas droit
+                        if (x + rayonVoisinageStatic < self.w):
+                            for xTemp in range(x + 1, x + rayonVoisinageStatic + 1):
+                                Iuv = self.Intensite(self.im[y + rayonVoisinage][xTemp][0],
+                                                     self.im[y + rayonVoisinage][xTemp][1],
+                                                     self.im[y + rayonVoisinage][xTemp][2])
+                                diffIntensite = (intensiteP - Iuv) ** 2
+                                somme = somme + (diffIntensite / (rayonVoisinage + 1))
+                                n = n + 1
+
+                    # pixel a gauche
                     if (x - rayonVoisinage >= 0):
                         # px du haut
                         Iuv = self.Intensite(self.im[y][x - rayonVoisinage][0],
                                              self.im[y][x - rayonVoisinage][1],
                                              self.im[y][x - rayonVoisinage][2])
                         diffIntensite = (intensiteP - Iuv) ** 2
-                        somme = somme + (diffIntensite/(rayonVoisinage+1))
+                        somme = somme + (diffIntensite / (rayonVoisinage + 1))
                         n = n + 1
                         #   si on atteint pas la limite bas de l'image
                     if (x + rayonVoisinage < self.w):
@@ -66,9 +108,8 @@ class Partie(Process):
                                              self.im[y][x + rayonVoisinage][1],
                                              self.im[y][x + rayonVoisinage][2])
                         diffIntensite = (intensiteP - Iuv) ** 2
-                        somme = somme + (diffIntensite/(rayonVoisinage+1))
+                        somme = somme + (diffIntensite / (rayonVoisinage + 1))
                         n = n + 1
-
 
                 imIntensiteMoy = somme / n
                 self.imIntensite[y][x] = imIntensiteMoy

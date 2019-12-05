@@ -4,11 +4,12 @@ from copy import deepcopy
 from multiprocessing import Queue
 
 import imageio
-from src.definitionIntensite.Intensite import Partie
+
+from definitionIntensite.Intensite import Partie
 
 if __name__ == '__main__':
     print("debut du programme")
-    im = imageio.imread('chargementImage/arbre.jpg', format='jpg')
+    im = imageio.imread('chargementImage/arbreMaison.png', format='png')
     info = im.shape
     h = info[0]
     w = info[1]
@@ -44,10 +45,16 @@ if __name__ == '__main__':
     print("ecriture de l'image ")
     for y in range(h):
         for x in range(w):
-            contraste = 1
-            im[y][x][0] = 255 - (imIntensite[y][x] * contraste)
-            im[y][x][1] = 255 - (imIntensite[y][x] * contraste)
-            im[y][x][2] = 255 - (imIntensite[y][x] * contraste)
+            contraste = 2
+            noir = 255 - (imIntensite[y][x] * contraste)
+            if noir > 255:
+                noir = 255
+            if noir < 0:
+                noir = 0
+
+            im[y][x][0] = noir
+            im[y][x][1] = noir
+            im[y][x][2] = noir
             """
             if imIntensite[y][x] > 100:
                 im[y][x][0] = 0
