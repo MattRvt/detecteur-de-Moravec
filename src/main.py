@@ -9,7 +9,7 @@ from definitionIntensite.Intensite import Partie
 
 if __name__ == '__main__':
     print("debut du programme")
-    im = imageio.imread('chargementImage/arbreMaison.png', format='png')
+    im = imageio.imread('chargementImage/arbre.jpg', format='jpg')
     info = im.shape
     h = info[0]
     w = info[1]
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     print("ecriture de l'image ")
     for y in range(h):
         for x in range(w):
-            contraste = 2
+            contraste = 1/10
             noir = 255 - (imIntensite[y][x] * contraste)
             if noir > 255:
                 noir = 255
@@ -55,14 +55,4 @@ if __name__ == '__main__':
             im[y][x][0] = noir
             im[y][x][1] = noir
             im[y][x][2] = noir
-            """
-            if imIntensite[y][x] > 100:
-                im[y][x][0] = 0
-                im[y][x][1] = 0
-                im[y][x][2] = 0
-            else:
-                im[y][x][0] = 255
-                im[y][x][1] = 255
-                im[y][x][2] = 255
-                        """
-    imageio.imsave('chargementImage/france.png', im, format='png')
+    imageio.imsave('chargementImage/arbre.png', im, format='png')

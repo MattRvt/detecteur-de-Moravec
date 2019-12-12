@@ -19,15 +19,18 @@ class Partie(Process):
         self.imIntensite = [[0 for j in range(w)] for i in range(h)]
 
     def run(self):
+        print("debut process :", self.i)
         for y in range(self.minY, self.maxY):
             for x in range(self.w):
 
-                # pour chaque pixel
                 rayonVoisinageStatic = 10
                 p = self.im[y][x]
-                intensiteP = self.Intensite(p[0], p[1], p[2])
                 somme = 0
                 n = 0
+
+                # pour chaque pixel
+                intensiteP = self.Intensite(p[0], p[1], p[2])
+                n += 1
                 for rayonVoisinage in range(0, rayonVoisinageStatic + 1):
 
                     rayonVoisinage = rayonVoisinage
@@ -122,4 +125,4 @@ class Partie(Process):
 
     # renvoie une intensité entre 255 et 0
     def Intensite(self, r, g, b):
-        return int((r + g + b) / 3)
+        return int(0.2989 * r + 0.5870 * g + 0.1140 * b)
