@@ -23,7 +23,7 @@ class Partie(Process):
         for y in range(self.minY, self.maxY):
             for x in range(self.w):
 
-                rayonVoisinageStatic = 10
+                rayonVoisinageStatic = 5
                 p = self.im[y][x]
                 somme = 0
                 n = 0
