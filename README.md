@@ -14,7 +14,7 @@ objectif: générer une heatMap des changement au seins d'une image
  - definition de la fenêtre: ligne 26 dans Intensite.py 
    la variable rayonVoisinageStatic correspond à rayon autour du pixels qui sera considèré comme étant dans la fenêtre.
 
-##résolution de problèmes
+## résolution de problèmes
  - les contours sont affiché mais n'apparaissent que très faiblement. <br>
     **solution:** augmenter la valeur du contraste ligne 46 de main.py
 # Créateurs du projet
